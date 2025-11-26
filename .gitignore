@@ -1,0 +1,10 @@
+# Binaries
+eino-test
+example_formats
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
