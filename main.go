@@ -35,6 +35,19 @@ func main() {
 		log.Fatalf("Failed to create agent graph: %v", err)
 	}
 
+	// 创建两模型对话 graph
+	twoModelRunner, err := CreateTwoModelChatGraph(ctx)
+	if err != nil {
+		log.Fatalf("Failed to create two model chat graph: %v", err)
+	}
+
+	// 运行两模型对话示例
+	go func() {
+		if err := RunTwoModelChat(ctx, twoModelRunner); err != nil {
+			log.Printf("Two model chat error: %v", err)
+		}
+	}()
+
 	// 在默认端口 (52538) 启动转发代理层
 	target, _ := url.Parse(fmt.Sprintf("http://localhost:%d", DevOpsServerPort))
 	proxy := httputil.NewSingleHostReverseProxy(target)
@@ -69,6 +82,7 @@ func main() {
 	log.Printf("✓ CORS enabled for all origins")
 	log.Printf("✓ Chain 'simple_chain' registered")
 	log.Printf("✓ Graph 'agent_graph' registered")
+	log.Printf("✓ Graph 'two_model_chat' registered and running")
 	log.Printf("\nAccess DevOps server via proxy: http://localhost:%d", ProxyPort)
 
 	if err := http.ListenAndServe(fmt.Sprintf(":%d", ProxyPort), proxyHandler); err != nil {
