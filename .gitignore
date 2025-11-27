@@ -8,3 +8,6 @@ example_formats
 
 # OS
 .DS_Store
+
+# Build cache
+.gocache/
